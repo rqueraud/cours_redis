@@ -37,9 +37,17 @@ RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://
 RUN apt-get update
 RUN apt-get install -y redis
 
+# Set directory
 WORKDIR /home/${NB_USER}
 COPY . ${HOME}
+
+# Download dependencies
+RUN python3.9 -m pip install gdown
+RUN gdown https://drive.google.com/uc?id=1KU2LAaY3dpc9f24Da1j1gAW4CG7zce4k
+RUN apt-get install -y unzip
+RUN unzip data.zip
+RUN rm data.zip
+
+# Set user
 RUN chown -R ${NB_UID} ${HOME}
-
-
 USER ${NB_USER}
